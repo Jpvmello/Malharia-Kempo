@@ -5,6 +5,8 @@
  */
 package model.dao;
 
+import java.util.ArrayList;
+import java.util.List;
 import model.pojo.Cliente;
 
 /**
@@ -12,5 +14,14 @@ import model.pojo.Cliente;
  * @author JeanPablo
  */
 public class ClienteDao implements Dao<Cliente>{
+    private static List<Cliente> listaCliente = new ArrayList<>();
+    private static ClienteDao instancia = null;
+    
+    public static ClienteDao getInstancia(){
+        if(ClienteDao.instancia == null)
+            instancia = new ClienteDao();
+        return instancia;
+    }
+    
     
 }
