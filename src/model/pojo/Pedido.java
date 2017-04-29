@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 public class Pedido {
     private Integer idPedido;
-    private Integer cadastroPessoa;
+    private Long cadastroPessoa;
     private Date data;
     private String refenciaEvento;
     private Float valorUnitario;
@@ -26,7 +26,7 @@ public class Pedido {
     private String cor;
     private String observacao;
     
-    public Pedido (Integer idPedido, Integer cadastroPessoa, Date data, String referenciaEvento, Float valorUnitario,
+    public Pedido (Integer idPedido, Long cadastroPessoa, Date data, String referenciaEvento, Float valorUnitario,
             Integer quantidade, Image imagemFrente, Image imagemCostas, String malha, String cor, String observacao) {
         this.idPedido = idPedido;
         this.cadastroPessoa = cadastroPessoa;
@@ -49,11 +49,11 @@ public class Pedido {
         this.idPedido = idPedido;
     }
 
-    public Integer getCadastroPessoa() {
+    public Long getCadastroPessoa() {
         return cadastroPessoa;
     }
 
-    public void setCadastroPessoa(Integer cadastroPessoa) {
+    public void setCadastroPessoa(Long cadastroPessoa) {
         this.cadastroPessoa = cadastroPessoa;
     }
 

@@ -12,10 +12,10 @@ import java.util.Objects;
  * @author JeanPablo
  */
 public class Cliente {
-    private Integer cadastroPessoa;
+    private Long cadastroPessoa;
     private String nome;
-    private Integer telefoneFixo;
-    private Integer celular;
+    private Long telefoneFixo;
+    private Long celular;
     private String email;
     private String rua;
     private Integer numero;
@@ -24,7 +24,7 @@ public class Cliente {
     private Integer cep;
     private String observacao;
     
-    public Cliente(Integer cadastroPessoa, String nome, Integer telefoneFixo, Integer celular, String email, String rua,
+    public Cliente(Long cadastroPessoa, String nome, Long telefoneFixo, Long celular, String email, String rua,
             Integer numero, String bairro, String codigoEstado, Integer cep, String observacao) {
         this.cadastroPessoa = cadastroPessoa;
         this.nome = nome;
@@ -39,11 +39,11 @@ public class Cliente {
         this.observacao = observacao;
     }
 
-    public Integer getCadastroPessoa() {
+    public Long getCadastroPessoa() {
         return cadastroPessoa;
     }
 
-    public void setCadastroPessoa(Integer cadastroPessoa) {
+    public void setCadastroPessoa(Long cadastroPessoa) {
         this.cadastroPessoa = cadastroPessoa;
     }
 
@@ -55,19 +55,19 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public Integer getTelefoneFixo() {
+    public Long getTelefoneFixo() {
         return telefoneFixo;
     }
 
-    public void setTelefoneFixo(Integer telefoneFixo) {
+    public void setTelefoneFixo(Long telefoneFixo) {
         this.telefoneFixo = telefoneFixo;
     }
 
-    public Integer getCelular() {
+    public Long getCelular() {
         return celular;
     }
 
-    public void setCelular(Integer celular) {
+    public void setCelular(Long celular) {
         this.celular = celular;
     }
 
