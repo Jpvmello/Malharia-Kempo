@@ -5,38 +5,101 @@
  */
 package model.pojo;
 
-import java.util.Objects;
+import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author JeanPablo
  */
-public class Cliente {
+@Entity
+@Table(name = "cliente")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c")
+    , @NamedQuery(name = "Cliente.findByCadastroPessoa", query = "SELECT c FROM Cliente c WHERE c.cadastroPessoa = :cadastroPessoa")
+    , @NamedQuery(name = "Cliente.findByNome", query = "SELECT c FROM Cliente c WHERE c.nome = :nome")
+    , @NamedQuery(name = "Cliente.findByTelefoneFixo", query = "SELECT c FROM Cliente c WHERE c.telefoneFixo = :telefoneFixo")
+    , @NamedQuery(name = "Cliente.findByCelular", query = "SELECT c FROM Cliente c WHERE c.celular = :celular")
+    , @NamedQuery(name = "Cliente.findByEmail", query = "SELECT c FROM Cliente c WHERE c.email = :email")
+    , @NamedQuery(name = "Cliente.findByRua", query = "SELECT c FROM Cliente c WHERE c.rua = :rua")
+    , @NamedQuery(name = "Cliente.findByNumero", query = "SELECT c FROM Cliente c WHERE c.numero = :numero")
+    , @NamedQuery(name = "Cliente.findByBairro", query = "SELECT c FROM Cliente c WHERE c.bairro = :bairro")
+    , @NamedQuery(name = "Cliente.findByComplemento", query = "SELECT c FROM Cliente c WHERE c.complemento = :complemento")
+    , @NamedQuery(name = "Cliente.findByCidade", query = "SELECT c FROM Cliente c WHERE c.cidade = :cidade")
+    , @NamedQuery(name = "Cliente.findByCep", query = "SELECT c FROM Cliente c WHERE c.cep = :cep")
+    , @NamedQuery(name = "Cliente.findByObservacao", query = "SELECT c FROM Cliente c WHERE c.observacao = :observacao")})
+public class Cliente implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "cadastroPessoa")
     private Long cadastroPessoa;
+    @Basic(optional = false)
+    @Column(name = "nome")
     private String nome;
+    @Column(name = "telefoneFixo")
     private Long telefoneFixo;
-    private Long celular;
+    @Basic(optional = false)
+    @Column(name = "celular")
+    private long celular;
+    @Basic(optional = false)
+    @Column(name = "email")
     private String email;
+    @Basic(optional = false)
+    @Column(name = "rua")
     private String rua;
-    private Integer numero;
+    @Column(name = "numero")
+    private Short numero;
+    @Basic(optional = false)
+    @Column(name = "bairro")
     private String bairro;
-    private String codigoEstado;
-    private Integer cep;
+    @Column(name = "complemento")
+    private String complemento;
+    @Basic(optional = false)
+    @Column(name = "cidade")
+    private String cidade;
+    @Basic(optional = false)
+    @Column(name = "cep")
+    private int cep;
+    @Column(name = "observacao")
     private String observacao;
-    
-    public Cliente(Long cadastroPessoa, String nome, Long telefoneFixo, Long celular, String email, String rua,
-            Integer numero, String bairro, String codigoEstado, Integer cep, String observacao) {
+    @JoinColumn(name = "codigoEstado", referencedColumnName = "codigoEstado")
+    @ManyToOne(optional = false)
+    private Estado codigoEstado;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cadastroPessoa")
+    private List<Pedido> pedidoList;
+
+    public Cliente() {
+    }
+
+    public Cliente(Long cadastroPessoa) {
+        this.cadastroPessoa = cadastroPessoa;
+    }
+
+    public Cliente(Long cadastroPessoa, String nome, long celular, String email, String rua, String bairro, String cidade, int cep) {
         this.cadastroPessoa = cadastroPessoa;
         this.nome = nome;
-        this.telefoneFixo = telefoneFixo;
         this.celular = celular;
         this.email = email;
         this.rua = rua;
-        this.numero = numero;
         this.bairro = bairro;
-        this.codigoEstado = codigoEstado;
+        this.cidade = cidade;
         this.cep = cep;
-        this.observacao = observacao;
     }
 
     public Long getCadastroPessoa() {
@@ -63,11 +126,11 @@ public class Cliente {
         this.telefoneFixo = telefoneFixo;
     }
 
-    public Long getCelular() {
+    public long getCelular() {
         return celular;
     }
 
-    public void setCelular(Long celular) {
+    public void setCelular(long celular) {
         this.celular = celular;
     }
 
@@ -87,11 +150,11 @@ public class Cliente {
         this.rua = rua;
     }
 
-    public Integer getNumero() {
+    public Short getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(Short numero) {
         this.numero = numero;
     }
 
@@ -103,19 +166,27 @@ public class Cliente {
         this.bairro = bairro;
     }
 
-    public String getCodigoEstado() {
-        return codigoEstado;
+    public String getComplemento() {
+        return complemento;
     }
 
-    public void setCodigoEstado(String codigoEstado) {
-        this.codigoEstado = codigoEstado;
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
     }
 
-    public Integer getCep() {
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public int getCep() {
         return cep;
     }
 
-    public void setCep(Integer cep) {
+    public void setCep(int cep) {
         this.cep = cep;
     }
 
@@ -127,66 +198,38 @@ public class Cliente {
         this.observacao = observacao;
     }
 
+    public Estado getCodigoEstado() {
+        return codigoEstado;
+    }
+
+    public void setCodigoEstado(Estado codigoEstado) {
+        this.codigoEstado = codigoEstado;
+    }
+
+    @XmlTransient
+    public List<Pedido> getPedidoList() {
+        return pedidoList;
+    }
+
+    public void setPedidoList(List<Pedido> pedidoList) {
+        this.pedidoList = pedidoList;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 23 * hash + Objects.hashCode(this.cadastroPessoa);
-        hash = 23 * hash + Objects.hashCode(this.nome);
-        hash = 23 * hash + Objects.hashCode(this.telefoneFixo);
-        hash = 23 * hash + Objects.hashCode(this.celular);
-        hash = 23 * hash + Objects.hashCode(this.email);
-        hash = 23 * hash + Objects.hashCode(this.rua);
-        hash = 23 * hash + Objects.hashCode(this.numero);
-        hash = 23 * hash + Objects.hashCode(this.bairro);
-        hash = 23 * hash + Objects.hashCode(this.codigoEstado);
-        hash = 23 * hash + Objects.hashCode(this.cep);
-        hash = 23 * hash + Objects.hashCode(this.observacao);
+        int hash = 0;
+        hash += (cadastroPessoa != null ? cadastroPessoa.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Cliente)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Cliente other = (Cliente) obj;
-        if (!Objects.equals(this.nome, other.nome)) {
-            return false;
-        }
-        if (!Objects.equals(this.email, other.email)) {
-            return false;
-        }
-        if (!Objects.equals(this.rua, other.rua)) {
-            return false;
-        }
-        if (!Objects.equals(this.bairro, other.bairro)) {
-            return false;
-        }
-        if (!Objects.equals(this.codigoEstado, other.codigoEstado)) {
-            return false;
-        }
-        if (!Objects.equals(this.observacao, other.observacao)) {
-            return false;
-        }
-        if (!Objects.equals(this.cadastroPessoa, other.cadastroPessoa)) {
-            return false;
-        }
-        if (!Objects.equals(this.telefoneFixo, other.telefoneFixo)) {
-            return false;
-        }
-        if (!Objects.equals(this.celular, other.celular)) {
-            return false;
-        }
-        if (!Objects.equals(this.numero, other.numero)) {
-            return false;
-        }
-        if (!Objects.equals(this.cep, other.cep)) {
+        Cliente other = (Cliente) object;
+        if ((this.cadastroPessoa == null && other.cadastroPessoa != null) || (this.cadastroPessoa != null && !this.cadastroPessoa.equals(other.cadastroPessoa))) {
             return false;
         }
         return true;
@@ -194,6 +237,7 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return "Cliente{" + "cadastroPessoa=" + cadastroPessoa + ", nome=" + nome + ", telefoneFixo=" + telefoneFixo + ", celular=" + celular + ", email=" + email + ", rua=" + rua + ", numero=" + numero + ", bairro=" + bairro + ", codigoEstado=" + codigoEstado + ", cep=" + cep + ", observacao=" + observacao + '}';
+        return "malharia.kempo.Cliente[ cadastroPessoa=" + cadastroPessoa + " ]";
     }
+    
 }

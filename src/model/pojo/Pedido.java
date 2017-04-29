@@ -5,56 +5,104 @@
  */
 package model.pojo;
 
-import java.awt.Image;
-import java.sql.Date;
-import java.util.Objects;
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author JeanPablo
  */
-public class Pedido {
-    private Integer idPedido;
-    private Long cadastroPessoa;
+@Entity
+@Table(name = "pedido")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM Pedido p")
+    , @NamedQuery(name = "Pedido.findByIdPedido", query = "SELECT p FROM Pedido p WHERE p.idPedido = :idPedido")
+    , @NamedQuery(name = "Pedido.findByData", query = "SELECT p FROM Pedido p WHERE p.data = :data")
+    , @NamedQuery(name = "Pedido.findByReferenciaEvento", query = "SELECT p FROM Pedido p WHERE p.referenciaEvento = :referenciaEvento")
+    , @NamedQuery(name = "Pedido.findByValorUnitario", query = "SELECT p FROM Pedido p WHERE p.valorUnitario = :valorUnitario")
+    , @NamedQuery(name = "Pedido.findByQuantidade", query = "SELECT p FROM Pedido p WHERE p.quantidade = :quantidade")
+    , @NamedQuery(name = "Pedido.findByMalha", query = "SELECT p FROM Pedido p WHERE p.malha = :malha")
+    , @NamedQuery(name = "Pedido.findByCor", query = "SELECT p FROM Pedido p WHERE p.cor = :cor")
+    , @NamedQuery(name = "Pedido.findByObservacao", query = "SELECT p FROM Pedido p WHERE p.observacao = :observacao")})
+public class Pedido implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "idPedido")
+    private Short idPedido;
+    @Basic(optional = false)
+    @Column(name = "data")
+    @Temporal(TemporalType.DATE)
     private Date data;
-    private String refenciaEvento;
-    private Float valorUnitario;
-    private Integer quantidade;
-    private Image imagemFrente;
-    private Image imagemCostas;
+    @Basic(optional = false)
+    @Column(name = "referenciaEvento")
+    private String referenciaEvento;
+    @Basic(optional = false)
+    @Column(name = "valorUnitario")
+    private float valorUnitario;
+    @Basic(optional = false)
+    @Column(name = "quantidade")
+    private int quantidade;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "imagemFrente")
+    private byte[] imagemFrente;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "imagemCostas")
+    private byte[] imagemCostas;
+    @Basic(optional = false)
+    @Column(name = "malha")
     private String malha;
+    @Basic(optional = false)
+    @Column(name = "cor")
     private String cor;
+    @Column(name = "observacao")
     private String observacao;
-    
-    public Pedido (Integer idPedido, Long cadastroPessoa, Date data, String referenciaEvento, Float valorUnitario,
-            Integer quantidade, Image imagemFrente, Image imagemCostas, String malha, String cor, String observacao) {
+    @JoinColumn(name = "cadastroPessoa", referencedColumnName = "cadastroPessoa")
+    @ManyToOne(optional = false)
+    private Cliente cadastroPessoa;
+
+    public Pedido() {
+    }
+
+    public Pedido(Short idPedido) {
         this.idPedido = idPedido;
-        this.cadastroPessoa = cadastroPessoa;
+    }
+
+    public Pedido(Short idPedido, Date data, String referenciaEvento, float valorUnitario, int quantidade, byte[] imagemFrente, byte[] imagemCostas, String malha, String cor) {
+        this.idPedido = idPedido;
         this.data = data;
-        this.refenciaEvento = referenciaEvento;
+        this.referenciaEvento = referenciaEvento;
         this.valorUnitario = valorUnitario;
         this.quantidade = quantidade;
         this.imagemFrente = imagemFrente;
         this.imagemCostas = imagemCostas;
         this.malha = malha;
         this.cor = cor;
-        this.observacao = observacao;
     }
 
-    public Integer getIdPedido() {
+    public Short getIdPedido() {
         return idPedido;
     }
 
-    public void setIdPedido(Integer idPedido) {
+    public void setIdPedido(Short idPedido) {
         this.idPedido = idPedido;
-    }
-
-    public Long getCadastroPessoa() {
-        return cadastroPessoa;
-    }
-
-    public void setCadastroPessoa(Long cadastroPessoa) {
-        this.cadastroPessoa = cadastroPessoa;
     }
 
     public Date getData() {
@@ -65,43 +113,43 @@ public class Pedido {
         this.data = data;
     }
 
-    public String getRefenciaEvento() {
-        return refenciaEvento;
+    public String getReferenciaEvento() {
+        return referenciaEvento;
     }
 
-    public void setRefenciaEvento(String refenciaEvento) {
-        this.refenciaEvento = refenciaEvento;
+    public void setReferenciaEvento(String referenciaEvento) {
+        this.referenciaEvento = referenciaEvento;
     }
 
-    public Float getValorUnitario() {
+    public float getValorUnitario() {
         return valorUnitario;
     }
 
-    public void setValorUnitario(Float valorUnitario) {
+    public void setValorUnitario(float valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
 
-    public Integer getQuantidade() {
+    public int getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(Integer quantidade) {
+    public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
 
-    public Image getImagemFrente() {
+    public byte[] getImagemFrente() {
         return imagemFrente;
     }
 
-    public void setImagemFrente(Image imagemFrente) {
+    public void setImagemFrente(byte[] imagemFrente) {
         this.imagemFrente = imagemFrente;
     }
 
-    public Image getImagemCostas() {
+    public byte[] getImagemCostas() {
         return imagemCostas;
     }
 
-    public void setImagemCostas(Image imagemCostas) {
+    public void setImagemCostas(byte[] imagemCostas) {
         this.imagemCostas = imagemCostas;
     }
 
@@ -129,66 +177,29 @@ public class Pedido {
         this.observacao = observacao;
     }
 
+    public Cliente getCadastroPessoa() {
+        return cadastroPessoa;
+    }
+
+    public void setCadastroPessoa(Cliente cadastroPessoa) {
+        this.cadastroPessoa = cadastroPessoa;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 47 * hash + Objects.hashCode(this.idPedido);
-        hash = 47 * hash + Objects.hashCode(this.cadastroPessoa);
-        hash = 47 * hash + Objects.hashCode(this.data);
-        hash = 47 * hash + Objects.hashCode(this.refenciaEvento);
-        hash = 47 * hash + Objects.hashCode(this.valorUnitario);
-        hash = 47 * hash + Objects.hashCode(this.quantidade);
-        hash = 47 * hash + Objects.hashCode(this.imagemFrente);
-        hash = 47 * hash + Objects.hashCode(this.imagemCostas);
-        hash = 47 * hash + Objects.hashCode(this.malha);
-        hash = 47 * hash + Objects.hashCode(this.cor);
-        hash = 47 * hash + Objects.hashCode(this.observacao);
+        int hash = 0;
+        hash += (idPedido != null ? idPedido.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Pedido)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Pedido other = (Pedido) obj;
-        if (!Objects.equals(this.refenciaEvento, other.refenciaEvento)) {
-            return false;
-        }
-        if (!Objects.equals(this.malha, other.malha)) {
-            return false;
-        }
-        if (!Objects.equals(this.cor, other.cor)) {
-            return false;
-        }
-        if (!Objects.equals(this.observacao, other.observacao)) {
-            return false;
-        }
-        if (!Objects.equals(this.idPedido, other.idPedido)) {
-            return false;
-        }
-        if (!Objects.equals(this.cadastroPessoa, other.cadastroPessoa)) {
-            return false;
-        }
-        if (!Objects.equals(this.data, other.data)) {
-            return false;
-        }
-        if (!Objects.equals(this.valorUnitario, other.valorUnitario)) {
-            return false;
-        }
-        if (!Objects.equals(this.quantidade, other.quantidade)) {
-            return false;
-        }
-        if (!Objects.equals(this.imagemFrente, other.imagemFrente)) {
-            return false;
-        }
-        if (!Objects.equals(this.imagemCostas, other.imagemCostas)) {
+        Pedido other = (Pedido) object;
+        if ((this.idPedido == null && other.idPedido != null) || (this.idPedido != null && !this.idPedido.equals(other.idPedido))) {
             return false;
         }
         return true;
@@ -196,6 +207,7 @@ public class Pedido {
 
     @Override
     public String toString() {
-        return "Pedido{" + "idPedido=" + idPedido + ", cadastroPessoa=" + cadastroPessoa + ", data=" + data + ", refenciaEvento=" + refenciaEvento + ", valorUnitario=" + valorUnitario + ", quantidade=" + quantidade + ", imagemFrente=" + imagemFrente + ", imagemCostas=" + imagemCostas + ", malha=" + malha + ", cor=" + cor + ", observacao=" + observacao + '}';
-    } 
+        return "malharia.kempo.Pedido[ idPedido=" + idPedido + " ]";
+    }
+    
 }
