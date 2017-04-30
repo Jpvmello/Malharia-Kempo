@@ -17,7 +17,7 @@ import model.pojo.Cliente;
  * @author JeanPablo
  */
 public class ClienteDao implements Dao<Cliente, Long>{
-    private static List<Cliente> listaCliente = new ArrayList<>();
+    //private static List<Cliente> listaCliente = new ArrayList<>();
     private static ClienteDao instancia = null;
     
     public static ClienteDao getInstancia(){
@@ -27,36 +27,42 @@ public class ClienteDao implements Dao<Cliente, Long>{
     }
     
     @Override
-    public void salvar (EntityManager em, Cliente cliente) {
-        em.getTransaction().begin();
-        em.persist(cliente);
-        em.getTransaction().commit();
+    public Boolean salvar (EntityManager em, Cliente cliente) {
+        try {
+            em.getTransaction().begin();
+            em.persist(cliente);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback(); //Para recuperar os dados em caso de falha na transação
+            return false;
+        }
+        return true;
     }
 
     @Override
     public Boolean atualizar (EntityManager em, Cliente cliente) {
         try {
             em.getTransaction().begin();
-            cliente = em.merge(cliente);
+            em.merge(cliente);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Long id = cliente.getCadastroPessoa();
-                if (buscar(em, id) == null) {
-                    return false;
-                }
-            }
-            throw ex;
+            em.getTransaction().rollback(); //Para recuperar os dados em caso de falha na transação
+            return false;
         }
         return true;
     }
     
     @Override
-    public void remover (EntityManager em, Cliente cliente) {
-        em.getTransaction().begin();
-        em.remove(cliente);
-        em.getTransaction().commit();
+    public Boolean remover (EntityManager em, Cliente cliente) {
+        try {
+            em.getTransaction().begin();
+            em.remove(cliente);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback(); //Para recuperar os dados em caso de falha na transação
+            return false;
+        }
+        return true;
     }
     
     @Override

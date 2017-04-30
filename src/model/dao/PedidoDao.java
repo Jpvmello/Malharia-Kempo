@@ -17,7 +17,7 @@ import model.pojo.Pedido;
  * @author JeanPablo
  */
 public class PedidoDao implements Dao<Pedido, Short> {
-    private static List<Pedido> listaPedido = new ArrayList<>();
+    //private static List<Pedido> listaPedido = new ArrayList<>();
     private static PedidoDao instancia = null;
     
     public static PedidoDao getInstancia(){
@@ -27,36 +27,42 @@ public class PedidoDao implements Dao<Pedido, Short> {
     }
 
     @Override
-    public void salvar (EntityManager em, Pedido pedido) {
-        em.getTransaction().begin();
-        em.persist(pedido);
-        em.getTransaction().commit();
+    public Boolean salvar (EntityManager em, Pedido pedido) {
+        try {
+            em.getTransaction().begin();
+            em.persist(pedido);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback(); //Para recuperar os dados em caso de falha na transação
+            return false;
+        }
+        return true;
     }
 
     @Override
     public Boolean atualizar (EntityManager em, Pedido pedido) {
         try {
             em.getTransaction().begin();
-            pedido = em.merge(pedido);
+            em.merge(pedido);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                Short id = pedido.getIdPedido();
-                if (buscar(em, id) == null) {
-                    return false;
-                }
-            }
-            throw ex;
+            em.getTransaction().rollback(); //Para recuperar os dados em caso de falha na transação
+            return false;
         }
         return true;
     }
     
     @Override
-    public void remover (EntityManager em, Pedido pedido) {
-        em.getTransaction().begin();
-        em.remove(pedido);
-        em.getTransaction().commit();
+    public Boolean remover (EntityManager em, Pedido pedido) {
+        try {
+            em.getTransaction().begin();
+            em.remove(pedido);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback(); //Para recuperar os dados em caso de falha na transação
+            return false;
+        }
+        return true;
     }
     
     @Override

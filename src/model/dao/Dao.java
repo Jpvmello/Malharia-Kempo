@@ -14,9 +14,9 @@ import javax.persistence.EntityManager;
  * @param <T>
  */
 public interface Dao<T, U> {
-    void salvar (EntityManager em, T objeto) throws Exception;
-    Boolean atualizar (EntityManager em, T objeto) throws Exception;
-    void remover (EntityManager em, T objeto) throws Exception;
+    Boolean salvar (EntityManager em, T objeto);
+    Boolean atualizar (EntityManager em, T objeto);
+    Boolean remover (EntityManager em, T objeto);
     T buscar (EntityManager em, U id);
     List<T> buscarTodos (EntityManager em);   
 }
